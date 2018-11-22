@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from "react-redux";
-// import {fetchData} from "./actions/photoActions";
+import {fetchData} from "./actions/listActions";
 import './App.css';
 
 class App extends Component {
@@ -9,52 +9,27 @@ class App extends Component {
     return (
       <div className="App">
           <h1>Тестовое приложение</h1>
-          <button onClick={getPhotosAction}>Получить фото</button>
+          <button onClick={getPhotosAction}>Получить данные</button>
           { store.isFetching ?
               <p>Загрузка</p> :
               store.error ?
                   <p>Чтото пошло не так. Ошибка {store.error}</p> :
-                  store.photos ?
-                       store.photos.hits.map((item, index) => {
+                  store.list ?
+                       store.list.hits.map((item, index) => {
                               return (
                                   <p key={index}>{item.objectID}</p>
                               )
-                          }) : <p>Получите фото</p>
+                          }) : <p>Получите данные</p>
           }
 
       </div>
     );
   }
 }
-const DEFAULT_QUERY = 'redux';
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-
-
-const fetchData = () => {
-    return dispatch => {
-        dispatch({
-            type: "GET_REQUEST",
-            payload: true,
-        });
-        fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${DEFAULT_QUERY}`)
-            .then(responce => responce.json())
-            .then(result => dispatch({
-                type: "GET_SUCCES",
-                payload: result,
-            }))
-            .catch(error => dispatch({
-                type: "GET_FAIL",
-                payload: error.message,
-            }));
-    }
-}
 
 const getStateToPtops = (store) => {
   return {
       store: store,
-    // error: store.error,
   }
 };
 
